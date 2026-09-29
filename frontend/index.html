@@ -1,52 +1,172 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SatQuery AI</title><link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SatQuery AI — Mission Control</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <div class="app">
 <aside class="sidebar">
-<div class="brand"><div class="logo">◈</div><div><b>SatQuery AI</b><small>Earth Observation Intelligence</small></div></div>
-<button id="newAnalysis" class="new">＋ New Analysis</button>
-<div class="nav-title">ANALYSIS</div>
-<nav>
-<button class="nav active">⌂ <span>Mission Control</span></button>
-<button class="nav">◫ <span>Analysis Workspace</span></button>
-<button class="nav">▣ <span>Imagery</span></button>
-<button class="nav">◉ <span>Single Image Analysis</span></button>
-<button class="nav">⌖ <span>Grounding</span></button>
-<button class="nav">⇄ <span>Change Detection</span></button>
-<button class="nav">◈ <span>Optical + SAR</span></button>
-</nav>
-<div class="nav-title">EXPLORE</div>
-<button class="nav">◎ <span>Geo Explorer</span></button><button class="nav">▥ <span>Analytics</span></button><button class="nav">▤ <span>Reports</span></button><button class="nav">◷ <span>Analysis History</span></button>
-<div class="bottom"><button class="nav">⚙ <span>Settings</span></button><div class="profile"><div class="avatar">VR</div><div><b>Vishesh Reddy</b><small>Analyst</small></div></div></div>
+  <div class="brand">
+    <div class="logo">◈</div>
+    <div><b>SatQuery AI</b><small>EARTH OBSERVATION INTELLIGENCE</small></div>
+  </div>
+
+  <button id="newAnalysis" class="new"><span>＋</span> New Analysis</button>
+
+  <div class="nav-title">ANALYSIS</div>
+  <nav>
+    <button class="nav active">⌂ <span>Mission Control</span></button>
+    <button class="nav">◫ <span>Analysis Workspace</span></button>
+    <button class="nav">▣ <span>Imagery</span></button>
+    <button class="nav">◉ <span>Single Image Analysis</span></button>
+    <button class="nav">⌖ <span>Grounding</span></button>
+    <button class="nav">⇄ <span>Change Detection</span></button>
+    <button class="nav">◈ <span>Optical + SAR</span></button>
+  </nav>
+
+  <div class="nav-title">EXPLORE</div>
+  <button class="nav">◎ <span>Geo Explorer</span></button>
+  <button class="nav">▥ <span>Analytics</span></button>
+  <button class="nav">▤ <span>Reports</span></button>
+  <button class="nav">◷ <span>Analysis History</span></button>
+
+  <div class="bottom">
+    <button class="nav">⚙ <span>Settings</span></button>
+    <div class="profile">
+      <div class="avatar">VR</div>
+      <div><b>Vishesh Reddy</b><small>ANALYST</small></div>
+    </div>
+  </div>
 </aside>
+
 <main>
-<header><div class="search">⌕ <input placeholder="Search location (e.g. Hyderabad, India)"></div><div class="actions"><button>◐</button><button>♧</button><button id="topUpload" class="primary">＋ Upload Images</button></div></header>
+<header>
+  <div class="search"><span>⌕</span><input placeholder="Search location (e.g. Hyderabad, India)"></div>
+  <div class="actions">
+    <button title="Theme">◐</button>
+    <button title="Notifications">♧</button>
+    <button id="topUpload" class="primary">＋ Upload Images</button>
+  </div>
+</header>
+
 <div class="content">
-<div class="heading"><div><h1>Mission Control</h1><p>Analyze, compare and understand Earth observation imagery using multimodal AI.</p></div><span class="online">● Agent Online</span></div>
-<div class="layout">
-<section class="map">
-<div class="maphead"><div><b>Hyderabad, India</b><small>17.3850° N, 78.4867° E</small></div><div><button id="zin">＋</button><button id="zout">−</button><button id="fit">⌗</button></div></div>
-<div class="viewer"><div id="placeholder" class="placeholder"><div class="sat">◈</div><h2>Satellite Analysis Workspace</h2><p>Upload optical, multispectral or SAR imagery to begin analysis.</p><button id="mainUpload" class="upload">Upload Satellite Image</button></div><img id="mainImage" class="hidden"><div class="maptools"><button>+</button><button>−</button><button>◈</button></div><span class="coords">17.3850° N · 78.4867° E</span></div>
-<div class="quick"><button data-type="single">▣<span><b>Single Image</b><small>Upload and analyze</small></span></button><button data-type="change">⇄<span><b>Change Detection</b><small>Compare two dates</small></span></button><button data-type="fusion">◈<span><b>Optical + SAR</b><small>Multimodal analysis</small></span></button><button data-type="grounding">⌖<span><b>Grounding</b><small>Find objects</small></span></button><button data-type="query">✦<span><b>Custom Query</b><small>Ask naturally</small></span></button></div>
-</section>
-<aside class="panel">
-<div class="tabs"><button class="tab active" data-tab="analysis">Analysis</button><button class="tab" data-tab="execution">Execution</button><button class="tab" data-tab="metadata">Metadata</button><button class="tab" data-tab="chat">AI Query</button></div>
-<div id="analysisTab" class="pane">
-<label>① Upload Imagery</label><div id="drop" class="drop"><strong>↑</strong><b>Drag & drop images here</b><span>or browse files</span><small>GeoTIFF, TIFF, PNG, JPG</small><input id="fileInput" type="file" accept=".jpg,.jpeg,.png,.webp,.tif,.tiff" multiple hidden></div><div id="files"></div>
-<label>② Analysis Type</label><select id="type"><option value="single">Single Image Analysis</option><option value="change">Bi-temporal Change Detection</option><option value="fusion">Optical + SAR Fusion</option><option value="grounding">Text Guided Grounding</option><option value="vqa">Visual Question Answering</option></select>
-<label>③ Query</label><textarea id="query" placeholder="Ask something about the satellite imagery..."></textarea><button id="run" class="run">▶ Run Analysis</button>
+  <div class="heading">
+    <div>
+      <div class="eyebrow">SATELLITE INTELLIGENCE / MISSION 01</div>
+      <h1>Mission Control</h1>
+      <p>Analyze, compare and understand Earth observation imagery using multimodal AI.</p>
+    </div>
+    <span class="online"><i></i> AGENT ONLINE</span>
+  </div>
+
+  <div class="layout">
+    <section class="map">
+      <div class="maphead">
+        <div>
+          <b>Hyderabad, India</b>
+          <small>17.3850° N &nbsp;·&nbsp; 78.4867° E &nbsp;·&nbsp; EARTH OBSERVATION</small>
+        </div>
+        <div class="map-actions"><button id="zin">＋</button><button id="zout">−</button><button id="fit">⌗</button></div>
+      </div>
+
+      <div class="viewer">
+        <div id="placeholder" class="placeholder">
+          <div class="sat">◈</div>
+          <div class="placeholder-tag">SATQUERY / READY</div>
+          <h2>Satellite Analysis Workspace</h2>
+          <p>Upload optical, multispectral or SAR imagery to begin analysis.</p>
+          <button id="mainUpload" class="upload">UPLOAD SATELLITE IMAGE</button>
+        </div>
+        <img id="mainImage" class="hidden" alt="Uploaded satellite imagery">
+        <div class="maptools"><button>+</button><button>−</button><button>◈</button></div>
+        <span class="coords">17.3850° N · 78.4867° E</span>
+        <span class="north">N</span>
+        <span class="scanline"></span>
+      </div>
+
+      <div class="quick">
+        <button data-type="single"><span class="quick-icon">▣</span><span><b>Single Image</b><small>UPLOAD AND ANALYZE</small></span></button>
+        <button data-type="change"><span class="quick-icon">⇄</span><span><b>Change Detection</b><small>COMPARE TWO DATES</small></span></button>
+        <button data-type="fusion"><span class="quick-icon">◈</span><span><b>Optical + SAR</b><small>MULTIMODAL ANALYSIS</small></span></button>
+        <button data-type="grounding"><span class="quick-icon">⌖</span><span><b>Grounding</b><small>FIND OBJECTS</small></span></button>
+        <button data-type="query"><span class="quick-icon">✦</span><span><b>Custom Query</b><small>ASK NATURALLY</small></span></button>
+      </div>
+    </section>
+
+    <aside class="panel">
+      <div class="tabs">
+        <button class="tab active" data-tab="analysis">ANALYSIS</button>
+        <button class="tab" data-tab="execution">EXECUTION</button>
+        <button class="tab" data-tab="metadata">METADATA</button>
+        <button class="tab" data-tab="chat">AI QUERY</button>
+      </div>
+
+      <div id="analysisTab" class="pane">
+        <label>01 / UPLOAD IMAGERY</label>
+        <div id="drop" class="drop">
+          <strong>↑</strong><b>DRAG &amp; DROP IMAGES HERE</b><span>or browse files</span><small>GEOTIFF · TIFF · PNG · JPG</small>
+          <input id="fileInput" type="file" accept=".jpg,.jpeg,.png,.webp,.tif,.tiff" multiple hidden>
+        </div>
+        <div id="files"></div>
+
+        <label>02 / ANALYSIS TYPE</label>
+        <select id="type">
+          <option value="single">Single Image Analysis</option>
+          <option value="change">Bi-temporal Change Detection</option>
+          <option value="fusion">Optical + SAR Fusion</option>
+          <option value="grounding">Text Guided Grounding</option>
+          <option value="vqa">Visual Question Answering</option>
+        </select>
+
+        <label>03 / QUERY</label>
+        <textarea id="query" placeholder="Ask something about the satellite imagery..."></textarea>
+        <button id="run" class="run">▶ &nbsp; RUN ANALYSIS</button>
+      </div>
+
+      <div id="executionTab" class="pane hidden">
+        <div class="exec-title"><b>AGENT EXECUTION</b><span id="execStatus">READY</span></div>
+        <div class="step done">✓ <span><b>Input validation</b><small>Format and compatibility</small></span></div>
+        <div class="step current">02 <span><b>Task classification</b><small>Route query to specialist tools</small></span></div>
+        <div class="step">03 <span><b>Tool selection</b><small>Specialist model registry</small></span></div>
+        <div class="step">04 <span><b>Evidence fusion</b><small>Text + spatial evidence</small></span></div>
+        <div class="step">05 <span><b>Report generation</b><small>Analysis summary</small></span></div>
+      </div>
+
+      <div id="metadataTab" class="pane hidden">
+        <div class="metadata">
+          <div><small>FORMAT</small><b id="mf">—</b></div>
+          <div><small>DIMENSIONS</small><b>Detected by backend</b></div>
+          <div><small>MODALITY</small><b id="mm">—</b></div>
+          <div><small>CRS</small><b>Pending</b></div>
+          <div><small>ACQUISITION</small><b>Pending</b></div>
+          <div><small>FILE SIZE</small><b id="ms">—</b></div>
+        </div>
+      </div>
+
+      <div id="chatTab" class="pane hidden chat">
+        <div id="result" class="empty">✦<b>Ask SatQuery AI</b><span>Ask about floods, vegetation, urban growth, objects or changes.</span></div>
+        <div class="chatbox"><textarea id="chatInput" placeholder="Ask a question about the imagery..."></textarea><button id="send">➤</button></div>
+      </div>
+    </aside>
+  </div>
+
+  <section class="recent">
+    <div class="recent-heading"><div><small>ANALYSIS RESULTS</small><h2>Recent Analysis</h2></div><button class="view-all">VIEW ALL →</button></div>
+    <div class="cards">
+      <article><i class="urban">CHANGE</i><span><b>Urban Expansion</b><small>Change Detection · 2 images</small><small>2 hours ago</small></span></article>
+      <article><i class="flood">OPTICAL + SAR</i><span><b>Flood Assessment</b><small>Multimodal Analysis</small><small>1 day ago</small></span></article>
+      <article><i class="veg">GROUNDING</i><span><b>Vegetation Monitoring</b><small>Single Image</small><small>2 days ago</small></span></article>
+    </div>
+  </section>
 </div>
-<div id="executionTab" class="pane hidden"><div class="exec-title"><b>Agent Execution</b><span id="execStatus">READY</span></div><div class="step done">✓ <span><b>Input validation</b><small>Format and compatibility</small></span></div><div class="step current">2 <span><b>Task classification</b><small>Route query to specialist tools</small></span></div><div class="step">3 <span><b>Tool selection</b><small>Specialist model registry</small></span></div><div class="step">4 <span><b>Evidence fusion</b><small>Text + spatial evidence</small></span></div><div class="step">5 <span><b>Report generation</b><small>Analysis summary</small></span></div></div>
-<div id="metadataTab" class="pane hidden"><div class="metadata"><div><small>Format</small><b id="mf">—</b></div><div><small>Dimensions</small><b>Detected by backend</b></div><div><small>Modality</small><b id="mm">—</b></div><div><small>CRS</small><b>Pending</b></div><div><small>Acquisition</small><b>Pending</b></div><div><small>File Size</small><b id="ms">—</b></div></div></div>
-<div id="chatTab" class="pane hidden chat"><div id="result" class="empty">✦<b>Ask SatQuery AI</b><span>Ask about floods, vegetation, urban growth, objects or changes.</span></div><div class="chatbox"><textarea id="chatInput" placeholder="Ask a question about the imagery..."></textarea><button id="send">➤</button></div></div>
-</aside>
+</main>
 </div>
-<section class="recent"><div><small>ANALYSIS RESULTS</small><h2>Recent Analysis</h2></div><div class="cards"><article><i class="urban">CHANGE</i><span><b>Urban Expansion</b><small>Change Detection · 2 images</small><small>2 hours ago</small></span></article><article><i class="flood">OPTICAL + SAR</i><span><b>Flood Assessment</b><small>Multimodal Analysis</small><small>1 day ago</small></span></article><article><i class="veg">GROUNDING</i><span><b>Vegetation Monitoring</b><small>Single Image</small><small>2 days ago</small></span></article></div></section>
-</div>
-</main></div>
 <script src="app.js"></script>
-</body></html>
+</body>
+</html>
