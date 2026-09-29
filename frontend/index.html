@@ -1,0 +1,2212 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SatQuery AI</title>
+
+    <style>
+        /* =========================================================
+           RESET
+           ========================================================= */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            background: #03080d;
+            color: #e8f3f8;
+
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+
+        /* =========================================================
+           APP
+           ========================================================= */
+
+        .app {
+            display: flex;
+            height: 100vh;
+            width: 100%;
+        }
+
+
+        /* =========================================================
+           SIDEBAR
+           ========================================================= */
+
+        .sidebar {
+            width: 270px;
+            min-width: 270px;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #07121b 0%,
+                    #050d14 100%
+                );
+
+            border-right: 1px solid #172a36;
+
+            padding: 20px;
+
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        /* LOGO */
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            margin-bottom: 25px;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 12px;
+
+            background:
+                radial-gradient(
+                    circle at 30% 25%,
+                    #1b5b75,
+                    #0b2533 65%
+                );
+
+            border: 1px solid #1d536a;
+
+            box-shadow:
+                0 0 20px rgba(25, 128, 170, 0.15);
+
+            font-size: 23px;
+        }
+
+        .logo h1 {
+            font-size: 20px;
+            font-weight: 650;
+            letter-spacing: -0.3px;
+        }
+
+        .logo span {
+            display: block;
+
+            margin-top: 3px;
+
+            color: #718b97;
+            font-size: 10px;
+        }
+
+
+        /* NEW ANALYSIS */
+
+        .new-chat {
+            width: 100%;
+
+            padding: 12px 14px;
+
+            border: 1px solid #205269;
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0c2837,
+                    #0a1c27
+                );
+
+            color: #dff6ff;
+
+            transition: 0.2s;
+        }
+
+        .new-chat:hover {
+            border-color: #327d9c;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #103548,
+                    #0c2532
+                );
+        }
+
+
+        /* SIDEBAR SECTION */
+
+        .sidebar-section {
+            margin-top: 30px;
+            margin-bottom: 12px;
+
+            color: #59717c;
+
+            font-size: 10px;
+            font-weight: 600;
+
+            letter-spacing: 1.5px;
+        }
+
+
+        /* HISTORY */
+
+        .history {
+            flex: 1;
+
+            overflow-y: auto;
+        }
+
+        .empty-history {
+            color: #4e6570;
+            font-size: 12px;
+        }
+
+
+        /* =========================================================
+           MAIN
+           ========================================================= */
+
+        .main {
+            flex: 1;
+
+            min-width: 0;
+
+            display: flex;
+            flex-direction: column;
+
+            background:
+                radial-gradient(
+                    circle at 50% 15%,
+                    rgba(0, 120, 170, 0.09),
+                    transparent 38%
+                ),
+
+                radial-gradient(
+                    circle at 80% 80%,
+                    rgba(0, 80, 130, 0.05),
+                    transparent 35%
+                ),
+
+                #03080d;
+        }
+
+
+        /* =========================================================
+           HEADER
+           ========================================================= */
+
+        .header {
+            height: 76px;
+
+            padding: 0 28px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            border-bottom: 1px solid #13252f;
+        }
+
+        .header h2 {
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .header p {
+            margin-top: 4px;
+
+            color: #6d838d;
+
+            font-size: 12px;
+        }
+
+
+        /* STATUS */
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+
+            color: #7e9ca7;
+
+            font-size: 11px;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #3bd38a;
+
+            box-shadow:
+                0 0 8px rgba(59, 211, 138, 0.5);
+        }
+
+
+        /* =========================================================
+           CHAT
+           ========================================================= */
+
+        .chat {
+            flex: 1;
+
+            overflow-y: auto;
+
+            padding: 40px;
+        }
+
+
+        /* WELCOME */
+
+        .welcome {
+            max-width: 720px;
+
+            margin: 80px auto;
+
+            text-align: center;
+        }
+
+        .satellite-icon {
+            width: 75px;
+            height: 75px;
+
+            margin: 0 auto 22px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 22px;
+
+            background:
+                radial-gradient(
+                    circle,
+                    #123b4d,
+                    #071822
+                );
+
+            border: 1px solid #1e5369;
+
+            box-shadow:
+                0 0 45px rgba(0, 125, 175, 0.12);
+
+            font-size: 37px;
+        }
+
+        .welcome h2 {
+            font-size: 31px;
+
+            font-weight: 650;
+
+            letter-spacing: -0.8px;
+        }
+
+        .welcome p {
+            max-width: 560px;
+
+            margin: 12px auto 0;
+
+            color: #718994;
+
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+
+        /* EXAMPLES */
+
+        .examples {
+            margin-top: 32px;
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 10px;
+        }
+
+        .examples button {
+            padding: 14px;
+
+            text-align: left;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #08161f,
+                    #07121a
+                );
+
+            border: 1px solid #17303d;
+            border-radius: 11px;
+
+            color: #a9c0c9;
+
+            transition:
+                border-color 0.2s,
+                background 0.2s,
+                transform 0.2s;
+        }
+
+        .examples button:hover {
+            border-color: #28677f;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0b1d28,
+                    #091720
+                );
+
+            transform: translateY(-1px);
+        }
+
+
+        /* =========================================================
+           CHAT MESSAGES
+           ========================================================= */
+
+        .message {
+            max-width: 900px;
+
+            margin: 0 auto 22px;
+
+            display: flex;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-content {
+            max-width: 75%;
+
+            padding: 13px 16px;
+
+            border-radius: 13px;
+
+            font-size: 14px;
+            line-height: 1.6;
+
+            white-space: pre-wrap;
+        }
+
+        .message.user .message-content {
+            background:
+                linear-gradient(
+                    135deg,
+                    #103849,
+                    #0d2b39
+                );
+
+            border: 1px solid #20556b;
+        }
+
+        .message.ai .message-content {
+            background: #08131b;
+
+            border: 1px solid #172d38;
+
+            color: #c4d5db;
+        }
+
+
+        /* =========================================================
+           IMAGE MESSAGE
+           ========================================================= */
+
+        .message-image {
+            max-width: 400px;
+            max-height: 280px;
+
+            display: block;
+
+            margin-bottom: 10px;
+
+            border-radius: 10px;
+
+            border: 1px solid #244452;
+        }
+
+
+        /* =========================================================
+           INPUT AREA
+           ========================================================= */
+
+        .input-area {
+            padding: 15px 25px 20px;
+        }
+
+
+        /* IMAGE PREVIEW */
+
+        .image-preview {
+            max-width: 900px;
+
+            margin: 0 auto 8px;
+
+            display: none;
+        }
+
+        .image-preview.active {
+            display: block;
+        }
+
+        .preview-wrapper {
+            position: relative;
+
+            display: inline-block;
+        }
+
+        .preview-wrapper img {
+            width: 150px;
+            height: 95px;
+
+            object-fit: cover;
+
+            border-radius: 9px;
+
+            border: 1px solid #275267;
+        }
+
+        .remove-image {
+            position: absolute;
+
+            top: -7px;
+            right: -7px;
+
+            width: 22px;
+            height: 22px;
+
+            border: 1px solid #354b55;
+            border-radius: 50%;
+
+            background: #0a151b;
+
+            color: white;
+
+            font-size: 12px;
+        }
+
+
+        /* INPUT BOX */
+
+        .input-box {
+            max-width: 900px;
+
+            margin: auto;
+
+            display: flex;
+            align-items: center;
+
+            padding: 7px;
+
+            border-radius: 14px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #08151e,
+                    #071119
+                );
+
+            border: 1px solid #1a3441;
+
+            box-shadow:
+                0 8px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .input-box:focus-within {
+            border-color: #285a6e;
+
+            box-shadow:
+                0 0 0 1px rgba(40, 110, 140, 0.12),
+                0 8px 30px rgba(0, 0, 0, 0.25);
+        }
+
+
+        /* ATTACH */
+
+        .attach {
+            width: 42px;
+            height: 42px;
+
+            border: none;
+            border-radius: 10px;
+
+            background: transparent;
+
+            color: #78939e;
+
+            font-size: 18px;
+
+            transition: 0.2s;
+        }
+
+        .attach:hover {
+            background: #10232d;
+            color: #a9cbd6;
+        }
+
+
+        /* TEXT INPUT */
+
+        #messageInput {
+            flex: 1;
+
+            min-width: 0;
+
+            padding: 12px;
+
+            background: transparent;
+
+            border: none;
+            outline: none;
+
+            color: #edf7fa;
+
+            font-size: 14px;
+        }
+
+        #messageInput::placeholder {
+            color: #506873;
+        }
+
+
+        /* SEND */
+
+        .send {
+            width: 42px;
+            height: 42px;
+
+            border: none;
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #14465a,
+                    #103447
+                );
+
+            color: white;
+
+            font-size: 17px;
+
+            transition: 0.2s;
+        }
+
+        .send:hover {
+            background:
+                linear-gradient(
+                    135deg,
+                    #1a5c74,
+                    #15475b
+                );
+
+            transform: translateY(-1px);
+        }
+
+        .send:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+
+        /* HINT */
+
+        .hint {
+            max-width: 900px;
+
+            margin: 8px auto 0;
+
+            text-align: center;
+
+            color: #3f555e;
+
+            font-size: 10px;
+        }
+
+
+        /* =========================================================
+           TYPING
+           ========================================================= */
+
+        .typing {
+            display: flex;
+
+            align-items: center;
+
+            gap: 5px;
+        }
+
+        .typing span {
+            width: 6px;
+            height: 6px;
+
+            border-radius: 50%;
+
+            background: #71909c;
+
+            animation: typing 1.2s infinite;
+        }
+
+        .typing span:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+
+        .typing span:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes typing {
+
+            0%,
+            60%,
+            100% {
+                opacity: 0.25;
+                transform: translateY(0);
+            }
+
+            30% {
+                opacity: 1;
+                transform: translateY(-3px);
+            }
+        }
+
+
+        /* =========================================================
+           SCROLLBAR
+           ========================================================= */
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #18313d;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #244a59;
+        }
+
+
+        /* =========================================================
+           RESPONSIVE
+           ========================================================= */
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+                display: none;
+            }
+
+            .header {
+                padding: 0 18px;
+            }
+
+            .chat {
+                padding: 20px;
+            }
+
+            .input-area {
+                padding: 12px;
+            }
+
+            .examples {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome {
+                margin: 50px auto;
+            }
+
+            .welcome h2 {
+                font-size: 25px;
+            }
+
+            .message-content {
+                max-width: 88%;
+            }
+        }
+/* =========================================================
+   ANALYST CORRECTION
+   ========================================================= */
+
+.ai-message-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.correction-button {
+    padding: 7px 11px;
+
+    border: 1px solid #234856;
+    border-radius: 8px;
+
+    background: #07151d;
+
+    color: #789aa7;
+
+    font-size: 11px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.correction-button:hover {
+    border-color: #31758d;
+
+    background: #0b202b;
+
+    color: #b6d6df;
+}
+
+.correction-box {
+    width: min(700px, 100%);
+
+    margin-top: 4px;
+
+    padding: 14px;
+
+    border: 1px solid #234856;
+    border-radius: 11px;
+
+    background: #07131b;
+
+    display: none;
+}
+
+.correction-box.active {
+    display: block;
+}
+
+.correction-box textarea {
+    width: 100%;
+
+    min-height: 95px;
+
+    padding: 10px;
+
+    resize: vertical;
+
+    border: 1px solid #1c3946;
+    border-radius: 8px;
+
+    outline: none;
+
+    background: #040c11;
+
+    color: #dcecf1;
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+.correction-box textarea:focus {
+    border-color: #2b667d;
+}
+
+.correction-box textarea::placeholder {
+    color: #526c76;
+}
+
+.correction-actions {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 8px;
+
+    margin-top: 9px;
+}
+
+.correction-cancel,
+.correction-save {
+    padding: 7px 12px;
+
+    border-radius: 7px;
+
+    font-size: 11px;
+
+    cursor: pointer;
+}
+
+.correction-cancel {
+    border: 1px solid #263b44;
+
+    background: transparent;
+
+    color: #78909a;
+}
+
+.correction-save {
+    border: 1px solid #285e72;
+
+    background: #0d3040;
+
+    color: #c8e8f1;
+}
+
+.correction-save:hover {
+    background: #124357;
+}
+
+.correction-status {
+    margin-top: 8px;
+
+    font-size: 11px;
+
+    color: #69c99b;
+}
+
+    </style>
+</head>
+
+
+<body>
+
+<div class="app">
+
+    <!-- ========================================================
+         SIDEBAR
+         ========================================================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                🛰️
+            </div>
+
+            <div>
+                <h1>SatQuery</h1>
+                <span>AI Remote Sensing</span>
+            </div>
+
+        </div>
+
+
+        <button
+            class="new-chat"
+            id="newChatButton"
+        >
+            ＋ New Analysis
+        </button>
+
+
+        <div class="sidebar-section">
+            RECENT ANALYSES
+        </div>
+
+
+        <div
+            class="history"
+            id="history"
+        >
+
+            <div class="empty-history">
+                No analyses yet
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ========================================================
+         MAIN
+         ========================================================= -->
+
+    <main class="main">
+
+
+        <!-- HEADER -->
+
+        <header class="header">
+
+            <div>
+
+                <h2>
+                    SatQuery AI
+                </h2>
+
+                <p>
+                    Interactive Vision-Language Remote Sensing Assistant
+                </p>
+
+            </div>
+
+
+            <div class="status">
+
+                <span class="status-dot"></span>
+
+                Agent Online
+
+            </div>
+
+        </header>
+
+
+        <!-- ====================================================
+             CHAT
+             ==================================================== -->
+
+        <section
+            class="chat"
+            id="chat"
+        >
+
+            <div
+                class="welcome"
+                id="welcome"
+            >
+
+                <div class="satellite-icon">
+                    🛰️
+                </div>
+
+
+                <h2>
+                    Explore Earth with AI
+                </h2>
+
+
+                <p>
+                    Upload a satellite or remote-sensing image
+                    and ask questions about what you see.
+                    SatQuery will eventually remember important
+                    observations and use them in future analyses.
+                </p>
+
+
+                <div class="examples">
+
+                    <button
+                        data-query="Detect possible flood-affected areas in this image."
+                    >
+                        🌊 Detect possible flood areas
+                    </button>
+
+
+                    <button
+                        data-query="Identify the major vegetation-covered regions in this image."
+                    >
+                        🌳 Identify vegetation
+                    </button>
+
+
+                    <button
+                        data-query="Analyze signs of urban development in this image."
+                    >
+                        🏙️ Analyze urban development
+                    </button>
+
+
+                    <button
+                        data-query="Identify areas that may show signs of wildfire or fire damage."
+                    >
+                        🔥 Identify possible fire damage
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ====================================================
+             INPUT AREA
+             ==================================================== -->
+
+        <div class="input-area">
+
+
+            <!-- IMAGE PREVIEW -->
+
+            <div
+                class="image-preview"
+                id="imagePreview"
+            ></div>
+
+
+            <!-- INPUT -->
+
+            <div class="input-box">
+
+
+                <input
+                    type="file"
+                    id="imageInput"
+                    accept="image/png,image/jpeg,image/webp"
+                    hidden
+                >
+
+
+                <button
+                    class="attach"
+                    id="attachButton"
+                    title="Upload satellite image"
+                >
+                    📎
+                </button>
+
+
+                <input
+                    type="text"
+                    id="messageInput"
+                    placeholder="Ask something about the satellite image..."
+                    autocomplete="off"
+                >
+
+
+                <button
+                    class="send"
+                    id="sendButton"
+                    title="Send"
+                >
+                    ➤
+                </button>
+
+            </div>
+
+
+            <div class="hint">
+                Upload an image and ask a natural-language question
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script>
+
+    // =========================================================
+    // CONFIGURATION
+    // =========================================================
+
+    const API_BASE = "http://127.0.0.1:5000";
+
+
+    // =========================================================
+    // ELEMENTS
+    // =========================================================
+
+    const imageInput =
+        document.getElementById("imageInput");
+
+    const attachButton =
+        document.getElementById("attachButton");
+
+    const imagePreview =
+        document.getElementById("imagePreview");
+
+    const messageInput =
+        document.getElementById("messageInput");
+
+    const sendButton =
+        document.getElementById("sendButton");
+
+    const chat =
+        document.getElementById("chat");
+
+    const welcome =
+        document.getElementById("welcome");
+
+    const history =
+        document.getElementById("history");
+
+    const newChatButton =
+        document.getElementById("newChatButton");
+
+
+    // =========================================================
+    // CURRENT IMAGE
+    // =========================================================
+
+    let selectedImage = null;
+
+
+    // =========================================================
+    // OPEN FILE PICKER
+    // =========================================================
+
+    attachButton.addEventListener(
+        "click",
+        () => {
+
+            imageInput.click();
+
+        }
+    );
+
+
+    // =========================================================
+    // IMAGE SELECTED
+    // =========================================================
+
+    imageInput.addEventListener(
+        "change",
+        () => {
+
+            const file =
+                imageInput.files[0];
+
+            if (!file) {
+                return;
+            }
+
+
+            selectedImage = file;
+
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                function(event) {
+
+                    imagePreview.classList.add("active");
+
+
+                    imagePreview.innerHTML = `
+
+                        <div class="preview-wrapper">
+
+                            <img
+                                src="${event.target.result}"
+                                alt="Selected satellite image"
+                            >
+
+                            <button
+                                class="remove-image"
+                                id="removeImage"
+                                title="Remove image"
+                            >
+                                ×
+                            </button>
+
+                        </div>
+
+                    `;
+
+
+                    document
+                        .getElementById("removeImage")
+                        .addEventListener(
+                            "click",
+                            removeImage
+                        );
+
+                };
+
+
+            reader.readAsDataURL(file);
+
+        }
+    );
+
+
+    // =========================================================
+    // REMOVE IMAGE
+    // =========================================================
+
+    function removeImage() {
+
+        selectedImage = null;
+
+        imageInput.value = "";
+
+        imagePreview.innerHTML = "";
+
+        imagePreview.classList.remove("active");
+
+    }
+
+
+    // =========================================================
+    // EXAMPLE QUESTIONS
+    // =========================================================
+
+    document
+        .querySelectorAll(".examples button")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    messageInput.value =
+                        button.dataset.query;
+
+                    messageInput.focus();
+
+                }
+            );
+
+        });
+
+
+    // =========================================================
+    // SEND ON ENTER
+    // =========================================================
+
+    messageInput.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter" &&
+                !event.shiftKey
+            ) {
+
+                event.preventDefault();
+
+                sendMessage();
+
+            }
+
+        }
+    );
+
+
+    // =========================================================
+    // SEND BUTTON
+    // =========================================================
+
+    sendButton.addEventListener(
+        "click",
+        sendMessage
+    );
+
+
+    // =========================================================
+    // SEND MESSAGE
+    // =========================================================
+
+    async function sendMessage() {
+
+    const message =
+        messageInput.value.trim();
+
+
+    if (!message) {
+
+        messageInput.focus();
+
+        return;
+
+    }
+
+
+    // =====================================================
+    // REQUIRE IMAGE
+    // =====================================================
+
+    if (!selectedImage) {
+
+        alert(
+            "Please upload a satellite image first."
+        );
+
+        return;
+
+    }
+
+
+    // =====================================================
+    // ADD USER MESSAGE
+    // =====================================================
+
+    addUserMessage(
+        message,
+        selectedImage
+    );
+
+
+    messageInput.value = "";
+
+
+    // =====================================================
+    // SHOW TYPING
+    // =====================================================
+
+    showTyping();
+
+
+    sendButton.disabled = true;
+
+
+    try {
+
+        // -------------------------------------------------
+        // FORM DATA
+        // -------------------------------------------------
+
+        const formData =
+            new FormData();
+
+
+        formData.append(
+            "image",
+            selectedImage
+        );
+
+
+        formData.append(
+            "question",
+            message
+        );
+
+
+        // -------------------------------------------------
+        // SEND TO FLASK
+        // -------------------------------------------------
+
+        const response =
+            await fetch(
+                `${API_BASE}/analyze`,
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
+
+
+        // -------------------------------------------------
+        // PARSE RESPONSE
+        // -------------------------------------------------
+
+        const data =
+            await response.json();
+
+
+        // -------------------------------------------------
+        // REMOVE TYPING
+        // -------------------------------------------------
+
+        removeTyping();
+
+
+        // -------------------------------------------------
+        // ERROR
+        // -------------------------------------------------
+
+        if (!response.ok || !data.success) {
+
+            addAIMessage(
+                "⚠️ " +
+                (
+                    data.error ||
+                    "SatQuery could not analyze the image."
+                )
+            );
+
+            return;
+
+        }
+
+
+        // -------------------------------------------------
+        // AI ANSWER
+        // -------------------------------------------------
+
+        addAIMessage(
+            data.answer,
+            message
+        );
+
+
+        // -------------------------------------------------
+        // ADD HISTORY
+        // -------------------------------------------------
+
+        addHistoryItem(
+            message
+        );
+
+
+        // -------------------------------------------------
+        // MEMORY STATUS
+        // -------------------------------------------------
+
+        if (data.memory_saved) {
+
+            console.log(
+                "[HINDSIGHT] Experience saved."
+            );
+
+        }
+
+
+        if (
+            data.memories_used &&
+            data.memories_used.length > 0
+        ) {
+
+            console.log(
+                "[HINDSIGHT] Memories used:",
+                data.memories_used
+            );
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "SatQuery error:",
+            error
+        );
+
+
+        removeTyping();
+
+
+        addAIMessage(
+            "⚠️ Could not connect to the SatQuery backend. " +
+            "Make sure the Flask server is running."
+        );
+
+
+    } finally {
+
+        sendButton.disabled = false;
+
+    }
+
+}
+
+
+    // =========================================================
+    // ADD USER MESSAGE
+    // =========================================================
+
+    function addUserMessage(
+        message,
+        image
+    ) {
+
+        removeWelcome();
+
+
+        const wrapper =
+            document.createElement("div");
+
+        wrapper.className =
+            "message user";
+
+
+        const content =
+            document.createElement("div");
+
+        content.className =
+            "message-content";
+
+
+        if (image) {
+
+            const imageElement =
+                document.createElement("img");
+
+            imageElement.className =
+                "message-image";
+
+            imageElement.src =
+                URL.createObjectURL(image);
+
+            imageElement.alt =
+                "Satellite image";
+
+            content.appendChild(
+                imageElement
+            );
+
+        }
+
+
+        const text =
+            document.createElement("div");
+
+        text.textContent =
+            message;
+
+        content.appendChild(text);
+
+
+        wrapper.appendChild(content);
+
+        chat.appendChild(wrapper);
+
+
+        scrollChat();
+
+    }
+
+
+    // =========================================================
+    // ADD AI MESSAGE
+    // =========================================================
+
+    function addAIMessage(
+    message,
+    question = ""
+) {
+
+    const wrapper =
+        document.createElement("div");
+
+    wrapper.className =
+        "message ai";
+
+
+    const messageWrapper =
+        document.createElement("div");
+
+    messageWrapper.className =
+        "ai-message-wrapper";
+
+
+    const content =
+        document.createElement("div");
+
+    content.className =
+        "message-content";
+
+
+    content.textContent =
+        message;
+
+
+    messageWrapper.appendChild(
+        content
+    );
+
+
+    // ========================================================
+    // CORRECTION BUTTON
+    // ========================================================
+
+    const correctionButton =
+        document.createElement("button");
+
+    correctionButton.className =
+        "correction-button";
+
+    correctionButton.textContent =
+        "✎ Correct this analysis";
+
+
+    messageWrapper.appendChild(
+        correctionButton
+    );
+
+
+    // ========================================================
+    // CORRECTION BOX
+    // ========================================================
+
+    const correctionBox =
+        document.createElement("div");
+
+    correctionBox.className =
+        "correction-box";
+
+
+    correctionBox.innerHTML = `
+
+        <textarea
+            placeholder="Tell SatQuery what was incorrect or what the correct interpretation should be..."
+        ></textarea>
+
+        <div class="correction-actions">
+
+            <button
+                class="correction-cancel"
+                type="button"
+            >
+                Cancel
+            </button>
+
+            <button
+                class="correction-save"
+                type="button"
+            >
+                Save Correction
+            </button>
+
+        </div>
+
+        <div
+            class="correction-status"
+        ></div>
+
+    `;
+
+
+    messageWrapper.appendChild(
+        correctionBox
+    );
+
+
+    // ========================================================
+    // ELEMENTS
+    // ========================================================
+
+    const textarea =
+        correctionBox.querySelector(
+            "textarea"
+        );
+
+    const cancelButton =
+        correctionBox.querySelector(
+            ".correction-cancel"
+        );
+
+    const saveButton =
+        correctionBox.querySelector(
+            ".correction-save"
+        );
+
+    const status =
+        correctionBox.querySelector(
+            ".correction-status"
+        );
+
+
+    // ========================================================
+    // OPEN CORRECTION BOX
+    // ========================================================
+
+    correctionButton.addEventListener(
+        "click",
+        () => {
+
+            correctionBox.classList.add(
+                "active"
+            );
+
+            correctionButton.style.display =
+                "none";
+
+            textarea.focus();
+
+        }
+    );
+
+
+    // ========================================================
+    // CANCEL
+    // ========================================================
+
+    cancelButton.addEventListener(
+        "click",
+        () => {
+
+            correctionBox.classList.remove(
+                "active"
+            );
+
+            correctionButton.style.display =
+                "";
+
+            textarea.value = "";
+
+            status.textContent = "";
+
+        }
+    );
+
+
+    // ========================================================
+    // SAVE CORRECTION
+    // ========================================================
+
+    saveButton.addEventListener(
+        "click",
+        async () => {
+
+            const correction =
+                textarea.value.trim();
+
+
+            if (!correction) {
+
+                status.style.color =
+                    "#d79a67";
+
+                status.textContent =
+                    "Please enter a correction.";
+
+                textarea.focus();
+
+                return;
+            }
+
+
+            saveButton.disabled =
+                true;
+
+            cancelButton.disabled =
+                true;
+
+            textarea.disabled =
+                true;
+
+
+            status.style.color =
+                "#789aa7";
+
+            status.textContent =
+                "Saving correction to Hindsight...";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API_BASE}/correct`,
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+
+                                question:
+                                    question,
+
+                                ai_analysis:
+                                    message,
+
+                                correction:
+                                    correction
+
+                            })
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (
+                    !response.ok ||
+                    !data.success
+                ) {
+
+                    throw new Error(
+                        data.error ||
+                        "Could not save correction."
+                    );
+
+                }
+
+
+                status.style.color =
+                    "#69c99b";
+
+                status.textContent =
+                    "✓ Correction saved to Hindsight.";
+
+
+                textarea.disabled =
+                    true;
+
+                saveButton.style.display =
+                    "none";
+
+                cancelButton.style.display =
+                    "none";
+
+
+                correctionButton.style.display =
+                    "";
+
+
+            } catch (error) {
+
+                console.error(
+                    "Correction error:",
+                    error
+                );
+
+
+                status.style.color =
+                    "#d97979";
+
+                status.textContent =
+                    "⚠️ " +
+                    error.message;
+
+
+                saveButton.disabled =
+                    false;
+
+                cancelButton.disabled =
+                    false;
+
+                textarea.disabled =
+                    false;
+
+            }
+
+        }
+    );
+
+
+    // ========================================================
+    // ADD TO CHAT
+    // ========================================================
+
+    wrapper.appendChild(
+        messageWrapper
+    );
+
+    chat.appendChild(
+        wrapper
+    );
+
+
+    scrollChat();
+
+}
+
+
+    // =========================================================
+    // TYPING INDICATOR
+    // =========================================================
+
+    function showTyping() {
+
+        const wrapper =
+            document.createElement("div");
+
+        wrapper.className =
+            "message ai";
+
+        wrapper.id =
+            "typingMessage";
+
+
+        wrapper.innerHTML = `
+
+            <div class="message-content">
+
+                <div class="typing">
+
+                    <span></span>
+                    <span></span>
+                    <span></span>
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        chat.appendChild(wrapper);
+
+        scrollChat();
+
+    }
+
+
+    // =========================================================
+    // REMOVE TYPING
+    // =========================================================
+
+    function removeTyping() {
+
+        const typing =
+            document.getElementById(
+                "typingMessage"
+            );
+
+
+        if (typing) {
+
+            typing.remove();
+
+        }
+
+    }
+
+
+    // =========================================================
+    // REMOVE WELCOME
+    // =========================================================
+
+    function removeWelcome() {
+
+        if (welcome) {
+
+            welcome.remove();
+
+        }
+
+    }
+
+
+    // =========================================================
+    // NEW ANALYSIS
+    // =========================================================
+
+    newChatButton.addEventListener(
+        "click",
+        () => {
+
+            chat.innerHTML = "";
+
+            chat.appendChild(
+                createWelcome()
+            );
+
+            removeImage();
+
+            messageInput.value = "";
+
+            messageInput.focus();
+
+        }
+    );
+
+
+    // =========================================================
+    // CREATE WELCOME SCREEN
+    // =========================================================
+
+    function createWelcome() {
+
+        const element =
+            document.createElement("div");
+
+        element.className =
+            "welcome";
+
+
+        element.innerHTML = `
+
+            <div class="satellite-icon">
+                🛰️
+            </div>
+
+            <h2>
+                Explore Earth with AI
+            </h2>
+
+            <p>
+                Upload a satellite or remote-sensing image
+                and ask questions about what you see.
+                SatQuery will remember useful observations
+                as we build the Hindsight-powered agent.
+            </p>
+
+            <div class="examples">
+
+                <button
+                    data-query="Detect possible flood-affected areas in this image."
+                >
+                    🌊 Detect possible flood areas
+                </button>
+
+                <button
+                    data-query="Identify the major vegetation-covered regions in this image."
+                >
+                    🌳 Identify vegetation
+                </button>
+
+                <button
+                    data-query="Analyze signs of urban development in this image."
+                >
+                    🏙️ Analyze urban development
+                </button>
+
+                <button
+                    data-query="Identify areas that may show signs of wildfire or fire damage."
+                >
+                    🔥 Identify possible fire damage
+                </button>
+
+            </div>
+
+        `;
+
+
+        element
+            .querySelectorAll(".examples button")
+            .forEach(button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        messageInput.value =
+                            button.dataset.query;
+
+                        messageInput.focus();
+
+                    }
+                );
+
+            });
+
+
+        return element;
+
+    }
+
+
+    // =========================================================
+    // SCROLL CHAT
+    // =========================================================
+
+    function scrollChat() {
+
+        chat.scrollTo({
+            top: chat.scrollHeight,
+            behavior: "smooth"
+        });
+
+    }
+function addHistoryItem(message) {
+
+    const empty =
+        history.querySelector(
+            ".empty-history"
+        );
+
+
+    if (empty) {
+        empty.remove();
+    }
+
+
+    const item =
+        document.createElement("div");
+
+
+    item.style.padding =
+        "10px 8px";
+
+    item.style.marginBottom =
+        "4px";
+
+    item.style.borderRadius =
+        "8px";
+
+    item.style.color =
+        "#8ea6b0";
+
+    item.style.fontSize =
+        "12px";
+
+    item.style.cursor =
+        "pointer";
+
+    item.style.whiteSpace =
+        "nowrap";
+
+    item.style.overflow =
+        "hidden";
+
+    item.style.textOverflow =
+        "ellipsis";
+
+
+    item.textContent =
+        message;
+
+
+    item.title =
+        message;
+
+
+    item.addEventListener(
+        "mouseenter",
+        () => {
+            item.style.background =
+                "#0c1c26";
+        }
+    );
+
+
+    item.addEventListener(
+        "mouseleave",
+        () => {
+            item.style.background =
+                "transparent";
+        }
+    );
+
+
+    history.prepend(
+        item
+    );
+
+}
+
+</script>
+
+</body>
+</html>
+```

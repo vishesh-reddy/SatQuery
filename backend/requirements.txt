@@ -1,0 +1,8 @@
+Flask
+flask-cors
+python-dotenv
+requests
+Pillow
+groq
+hindsight-client
+gunicorn
